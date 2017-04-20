@@ -11,4 +11,4 @@ router.get('/getmenuItems', function(req, res) {
 		res.json(info);
 	//   res.render('menu', {menu: docs})
 })});
-module.exports = router
+module.exports = router;

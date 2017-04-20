@@ -14,18 +14,50 @@ let drinks = [
 	{name: "Mountain Dew", img: "mountainDew.jpg", price: 2.49}
 ]
 
-let everything = [];
+let arr = [];
+/*
 for (var item of pizzas) 
-	everything.push(item);
+	arr.push(item);
 
 for (var item of desserts)
-	everything.push(item);
+	arr.push(item);
 
 for (var item of drinks)
-	everything.push(item);
+	arr.push(item);
+*/
+
+$(document).ready(function() {
+	var jqxhr=$.ajax("/getMenuItems")
+	.done(function(docs) {
+		for(doc of docs)
+			arr.push(doc);
+		showMenu();
+	})
+	.fail(function() {
+		alert("Try Again!");
+	})
+})
 
 
 function showMenu() {
+	for (var item of arr) {
+		pizzaDiv.innerHTML += `<div class="row">
+			<div class="col-md-3 text-center">
+				<h3>${item.name}</h3>
+			</div> 
+			<div class="col-md-3 text-center">
+				<img src="./images/${item.img}" class="pizza" alt="Pepporoni Pizza"> <br> 
+			</div>
+			<div class="col-md-3 text-center">
+				<h3>${item.price}</h3>
+			</div> 
+			<div class="col-md-3 text-center">
+				<button class="btn btn-primary">Order</button>
+			</div>
+			</div>`;
+	}
+
+	/*
 	var pizzaDiv = document.getElementById("pizzaDiv");
 	var dessertDiv = document.getElementById("dessertDiv");
 	var drinkDiv = document.getElementById("drinkDiv");
@@ -80,6 +112,7 @@ function showMenu() {
 			</div>
 			</div>`;
 	}
+	*/
 }
 
 function addToCart(pId) {
@@ -101,7 +134,7 @@ function addToCart(pId) {
 
 function registerButtonEvents() {
 	let buttons = document.getElementsByTagName("button");
-	for(let i=0; i<everything.length; i++) {
+	for(let i=0; i<arr.length; i++) {
 		buttons[i].addEventListener("click", function () {
 			addToCart(i);
 		});
@@ -127,17 +160,17 @@ function showCart() {
 	else{
 		cart = cartJ.split(",");
 		for (i in cart) {
-			item = everything[cart[i]];
+			item = arr[cart[i]];
 			if (cart.length != 0) 
 				total += item.price;
 			else
 				total = 0;
 			info += `<div class="row">
 			<div class="col-md-3 text-center">
-				<h3>${item.name}</h3>
+				<h3>${item.pizzaName}</h3>
 			</div> 
 			<div class="col-md-3 text-center">
-				<img src="./images/${item.img}" class="pizza" alt="Pepporoni Pizza"> <br> 
+				<img src="./images/${item.imageName}" class="pizza" alt="Pepporoni Pizza"> <br> 
 			</div>
 			<div class="col-md-3 text-center">
 				<h3>${item.price}</h3>
@@ -165,4 +198,26 @@ function remove(i) {
 		localStorage.setItem("number",cart.length);
 		}
 	showCart();
+}
+
+function sendOrder() {
+	cartArr = JSON.parse("["+localStorage.getItem("cart")+"]");
+	var itemIds=[];
+	if (cartArr === null)
+		document.getElementById("cart").value="No item!";
+	else
+	{
+		for (index of cartArr)
+			itemIds.push(arr[index]._id);
+		var phone=$("#phone").value;
+		var order={"phone":phone, "itemIds":itemIds};
+		$.ajax({
+			mehtod:"post",
+			url:"processOrders",
+			data: order
+		})
+		.done(function(result){
+			$("#cart").html("your order has been placed!" + result);
+		})
+	}
 }

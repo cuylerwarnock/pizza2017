@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Menu Page</title>
+	<title>Main Page</title>
 
 	<link rel="stylesheet" type="text/css" href="./css/style.css">
 
@@ -29,40 +29,23 @@
 			</ul>
 			<a href="cart.html"><img src="./images/cart.jpg" class="cart" alt="cart"><span id="numItems" class="badge" style="float: right;">0</span></a>
 		</div>
-		<div class="clear"></div>
-		<hr>
-		<div class="content">
-			<h1>Pizzas</h1>
-			<div id="pizzaDiv">
-			</div>
-
-			<h1>Desserts</h1>
-			<div id="dessertDiv">
-			</div>
-
-			<h1>Drinks</h1>
-			<div id="drinkDiv">
-			</div>
-		</div>
-		<div class="clear"> </div>
-		<br>
-		<hr>
-		<div id="footer">
-			<img class="logo" src="./images/logo1.jpg" alt="logo">
-			<ul>
-				<li><a href="./main.html">Main</a></li>
-				<li><a href="./menu.html">Menu</a></li>
-				<li><a href="./checkout.html">Checkout</a></li>
-				<li><a href="./storeLocation.html">Store Location</a></li>
-			</ul>
-		</div>
-		<div class="clear"></div>
 	</div>
-	<div class="clear"></div>
-	<hr>
 </body>
+{{{body}}}
+
+<hr>
+<footer>
+	<img class="logo" src="./images/logo1.jpg" alt="logo">
+	<ul>
+		<li><a href="./main.html">Main</a></li>
+		<li><a href="./menu.html">Menu</a></li>
+		<li><a href="./checkout.html">Checkout</a></li>
+		<li><a href="./storeLocation.html">Store Location</a></li>
+	</ul>
+</footer>
+
 <script type="text/javascript" src="./js/cartClient.js"></script>
 <script type="text/javascript">
-	registerButtonEvents();
+	document.getElementById("numItems").innerHTML = localStorage.getItem("number");
 </script>
 </html>

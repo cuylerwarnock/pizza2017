@@ -1,7 +1,7 @@
 var MongoClient = require('mongodb').MongoClient;
 var assert = require('assert');
 var dbLink=require("./json/config.json");
-var url= dbLink.dbServer.url;
+var url= dbLink.devServer.url;
 
 MongoClient.connect(url, function(err, db) {
 	//function(err, db) : call back funtion : after we connect the server this server runs

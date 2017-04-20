@@ -6,10 +6,15 @@ var db = require('./db');
 var dbLink=require("./json/config.json");
 var url = dbLink.devServer.url;
 var app = express();
+var handlebars=require("express-handlebars").create({defaultLayout:"main"});
+app.engine('handlebars', handlebars.engine);
+app.set('view engine', 'handlebars');
 var publicPath = path.resolve(__dirname,"public");
 app.use(express.static(publicPath));
 
 app.use(require('./routers/getMenuItems'));
+app.use(require('./routers/popMenu'));
+app.use(require('./routers/processOrders'));
 
 db.connect(url, function(err) {
 	if (err) {
@@ -44,8 +49,4 @@ app.get('/cart', function (req, res) {
 app.get('/signup', function (req, res) {
 	console.log("Coming a signup request!");
 	res.sendFile(`${publicPath}/signup.html`);
-});
-
-app.listen(3000, function() {
-console.log("Example app listening on port 3000!");
 });
