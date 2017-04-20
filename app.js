@@ -13,8 +13,10 @@ var publicPath = path.resolve(__dirname,"public");
 app.use(express.static(publicPath));
 
 app.use(require('./routers/getMenuItems'));
+app.use(require('./routers/getOrders'));
 app.use(require('./routers/popMenu'));
 app.use(require('./routers/processOrders'));
+app.use(require('./routers/signupServer'));
 
 db.connect(url, function(err) {
 	if (err) {

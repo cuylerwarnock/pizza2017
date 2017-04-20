@@ -26,7 +26,7 @@ for (var item of drinks)
 	arr.push(item);
 */
 
-$(document).ready(function() {
+function createMenu() {
 	var jqxhr=$.ajax("/getMenuItems")
 	.done(function(docs) {
 		for(doc of docs)
@@ -36,7 +36,19 @@ $(document).ready(function() {
 	.fail(function() {
 		alert("Try Again!");
 	})
-})
+}
+
+function createCart() {
+var jqxhr=$.ajax("/getMenuItems")
+	.done(function(docs) {
+		for(doc of docs)
+			arr.push(doc);
+		showCart()
+	})
+	.fail(function() {
+		alert("Try Again!");
+	})
+}
 
 
 function showMenu() {
@@ -56,6 +68,8 @@ function showMenu() {
 			</div>
 			</div>`;
 	}
+
+	registerButtonEvents();
 
 	/*
 	var pizzaDiv = document.getElementById("pizzaDiv");
@@ -167,10 +181,10 @@ function showCart() {
 				total = 0;
 			info += `<div class="row">
 			<div class="col-md-3 text-center">
-				<h3>${item.pizzaName}</h3>
+				<h3>${item.name}</h3>
 			</div> 
 			<div class="col-md-3 text-center">
-				<img src="./images/${item.imageName}" class="pizza" alt="Pepporoni Pizza"> <br> 
+				<img src="./images/${item.img}" class="pizza" alt="Pepporoni Pizza"> <br> 
 			</div>
 			<div class="col-md-3 text-center">
 				<h3>${item.price}</h3>
@@ -200,24 +214,61 @@ function remove(i) {
 	showCart();
 }
 
+
 function sendOrder() {
 	cartArr = JSON.parse("["+localStorage.getItem("cart")+"]");
 	var itemIds=[];
 	if (cartArr === null)
-		document.getElementById("cart").value="No item!";
+		document.getElementById("myCart").value="No item!";
 	else
 	{
 		for (index of cartArr)
 			itemIds.push(arr[index]._id);
-		var phone=$("#phone").value;
+		var phone=document.getElementById("phone").value;
 		var order={"phone":phone, "itemIds":itemIds};
 		$.ajax({
-			mehtod:"post",
+			method:"post",
 			url:"processOrders",
 			data: order
 		})
 		.done(function(result){
-			$("#cart").html("your order has been placed!" + result);
+			$("#myCart").html("Your order has been placed!" + result);
+			clearCart();
 		})
 	}
+}
+
+function submitUser() {
+	username = document.getElementById("username").value;
+	pwd = document.getElementById("pwd").value;
+	var user = {"username":username, "pwd":pwd};
+	$.ajax({
+		method:"post",
+		url:"signupServer",
+		data: user
+	})
+	.done(function(result){
+		if (result)
+			$("#result").html("User Submitted");
+		else
+			$("#result").html("Username already taken. Please choose another.");
+	})
+}
+
+function getSummary() {
+	var jqxhr=$.ajax("/getOrders")
+	.done(function(docs) {
+		var total = 0;
+		var numPizzas = 0;
+		for(doc of docs) {
+			numPizzas += doc.items.length;
+			for (pizza of doc.items)
+				total += pizza.price;
+		}
+		document.getElementById("numPizzas").innerHTML = "There were " + numPizzas + " pizzas sold today!";
+		document.getElementById("total").innerHTML = "The total revenue for today was $"+total.toFixed(2);
+	})
+	.fail(function() {
+		alert("Try Again!");
+	})
 }
