@@ -23,9 +23,9 @@ db.connect(url, function(err) {
 		console.log('Unable to connect to Mongo.');
 		process.exit(1)}
 	else {
-		app.listen(3000, function() {
-		console.log('Listening on port 3000...')
-	})};
+		var listener=http.createServer(app).listen(process.env.PORT||3000);
+		console.log('Server is listening at port'+listener.address().port);
+	};
 });
 
 app.get('/', function (req, res) {
