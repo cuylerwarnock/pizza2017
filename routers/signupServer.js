@@ -10,7 +10,7 @@ var express = require('express'),
  	pwd = req.body.pwd;
  	var collection = db.getDb().collection("users");
  	//console.log(collection.find({"username": username},{"username": 1}));
- 	collection.insert({"username": username}, function(err, document) {
+ 	collection.insert({"username": username, "password": password}, function(err, document) {
  		if (err !== null)
  			res.send(false);
  		else
