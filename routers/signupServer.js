@@ -16,12 +16,5 @@ var express = require('express'),
  		else
  			res.send(true);
  	}
- 	//
- 	//	res.send(false);
- 	//}
- 	//else {
- 	//	collection.insert({"username":username, "pwd":pwd}); 	
- 	//	res.send(true);
- 	//}
 )});
 module.exports = router;
