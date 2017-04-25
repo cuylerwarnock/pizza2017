@@ -3,7 +3,7 @@ var express = require('express')
 var http = require("http");
 var path = require("path");
 var db = require('./db');
-var dbLink=require("./json/dbProduction.json");
+var dbLink=require("./json/config.json");
 var url = dbLink.devServer.url;
 var app = express();
 var handlebars=require("express-handlebars").create({defaultLayout:"main"});
@@ -23,8 +23,8 @@ db.connect(url, function(err) {
 		console.log('Unable to connect to Mongo.');
 		process.exit(1)}
 	else {
-		var listener=http.createServer(app).listen(process.env.PORT||3000);
-		console.log('Server is listening at port'+listener.address().port);
+		app.listen(3000, function() {
+		console.log('Listening on port 3000...')
 	})};
 });
 
